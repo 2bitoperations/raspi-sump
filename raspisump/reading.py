@@ -84,6 +84,7 @@ def initialstate_stream_reading(reading):
         streamer.log(key=configs["initialstate.item_key"], value=reading)
         streamer.flush()
         streamer.close()
+        log.log_restarts("sent initialstate reading")
     except Exception as ex:
         log.log_errors("problem streaming reading to initialstate!")
 

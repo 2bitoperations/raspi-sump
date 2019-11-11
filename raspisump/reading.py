@@ -24,7 +24,7 @@ configs = {
     "trig_pin": config.getint("gpio_pins", "trig_pin"),
     "echo_pin": config.getint("gpio_pins", "echo_pin"),
     "unit": config.get("pit", "unit"),
-    "initialstate.enabled": config.get("initialstate", "enabled"),
+    "initialstate.enabled": config.getint("initialstate", "enabled"),
     "initialstate.bucket_name": config.get("initialstate", "bucket_name"),
     "initialstate.bucket_key": config.get("initialstate", "bucket_key"),
     "initialstate.access_key": config.get("initialstate", "access_key"),

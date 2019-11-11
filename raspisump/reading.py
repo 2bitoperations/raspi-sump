@@ -24,6 +24,11 @@ configs = {
     "trig_pin": config.getint("gpio_pins", "trig_pin"),
     "echo_pin": config.getint("gpio_pins", "echo_pin"),
     "unit": config.get("pit", "unit"),
+    "initialstate.enabled": config.get("initialstate", "enabled"),
+    "initialstate.bucket_name": config.get("initialstate", "bucket_name"),
+    "initialstate.bucket_key": config.get("initialstate", "bucket_key"),
+    "initialstate.access_key": config.get("initialstate", "access_key"),
+    "initialstate.item_key": config.get("initialstate", "item_key")
 }
 
 # If item in raspisump.conf add to configs dict. If not provide defaults.
@@ -67,6 +72,22 @@ def water_reading():
     return round(value.depth(raw_distance, pit_depth), 1)
 
 
+def initialstate_stream_reading(reading):
+    if "initialstate.enabled" not in configs or configs["initialstate.enabled"] != 1:
+        return
+
+    try:
+        from ISStreamer.Streamer import Streamer
+        streamer = Streamer(bucket_name=configs["initialstate.bucket_name"],
+                            bucket_key=configs["initialstate.bucket_key"],
+                            access_key=configs["initialstate.access_key"])
+        streamer.log(key=configs["initialstate.item_key"], value=reading)
+        streamer.flush()
+        streamer.close()
+    except Exception as ex:
+        log.log_errors("problem streaming reading to initialstate!")
+
+
 def water_depth():
     """Determine the depth of the water, log result and generate alert
     if needed.
@@ -78,6 +99,7 @@ def water_depth():
     if water_depth < 0.0:
         water_depth = 0.0
     log.log_reading(water_depth)
+
 
     if water_depth > critical_water_level and configs["alert_when"] == "high":
         alerts.determine_if_alert(water_depth)

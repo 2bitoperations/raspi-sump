@@ -32,7 +32,9 @@ configs = {
     "initialstate.bucket_name": config.get("initialstate", "bucket_name"),
     "initialstate.bucket_key": config.get("initialstate", "bucket_key"),
     "initialstate.access_key": config.get("initialstate", "access_key"),
-    "initialstate.item_key": config.get("initialstate", "item_key")
+    "initialstate.item_key": config.get("initialstate", "item_key"),
+    "jsonfile.enabled": config.getint("jsonfile", "enabled"),
+    "jsonfile.path": config.get("jsonfile", "path")
 }
 
 # If item in raspisump.conf add to configs dict. If not provide defaults.

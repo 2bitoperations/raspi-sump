@@ -60,7 +60,8 @@ it manually;
 
 Install Raspi-Sump From Source
 ==================
-    sudo python3 setup.py install
+    sudo python3 setup.py clean install
+    sudo pip3 install .
 
 Install Raspi-Sump
 ==================

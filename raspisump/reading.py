@@ -6,6 +6,10 @@
 #
 # All configuration changes should be done in raspisump.conf
 # MIT License -- http://www.linuxnorth.org/raspi-sump/license.html
+import json
+import os
+import stat
+import time
 
 try:
     import ConfigParser as configparser  # Python2
@@ -87,6 +91,20 @@ def initialstate_stream_reading(reading):
         log.log_restarts("sent initialstate reading")
     except Exception as ex:
         log.log_errors("problem streaming reading to initialstate!")
+
+
+def json_file_reading(reading):
+    if "jsonfile.enabled" not in configs or configs["jsonfile.enabled"] != 1:
+        return
+
+    reading_for_json = {"level": reading,
+                        "timestamp": time.time() * 1000}
+    try:
+        with open(configs["jsonfile.path"], mode='w') as jsonfile:
+            json.dump(reading_for_json, jsonfile)
+        os.chmod(configs["jsonfile.path"], stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
+    except Exception as ex:
+        log.log_errors("problem streaming to json file!")
 
 
 def water_depth():

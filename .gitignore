@@ -10,3 +10,5 @@ nosetests.xml
 .noseids
 .vscode
 venv
+raspisump.conf*
+.idea/**
